@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:musicxmatch/musicDetailModelB.dart';
 import 'dart:convert';
+import 'musicDetaillModelC.dart';
 import 'musicModel.dart';
 
 class MusicRepo {
@@ -10,34 +12,33 @@ class MusicRepo {
     if (result.statusCode != 200) {
       throw Exception();
     }
-    // debugPrint("\nResult");
-    // debugPrint(result.body);
     return parsedJson(result.body);
   }
 
   MusicX parsedJson(final response) {
     final jsonDecode = json.decode(response);
-    // var jsonEncode = json.encode(jsonDecode);
-    // debugPrint("\nResponse");
-    // debugPrint(jsonDecode.toString());
     return MusicX.fromJson(jsonDecode);
   }
 
-  Future<String> getMusicDetailsB(int trackId) async {
+  Future<MusicDetailB> getMusicDetailsB(int trackId) async {
     var result = await http.Client().get(Uri.parse(
         "https://api.musixmatch.com/ws/1.1/track.get?track_id=$trackId&apikey=64c31aa4e064d70b5352bec1a5934a5c"));
     if (result.statusCode != 200) {
       throw Exception();
     }
-    return result.body;
+    final jsonDecode = json.decode(result.body);
+
+    return MusicDetailB.fromJson(jsonDecode);
   }
 
-  Future<String> getMusicDetailsC(int trackId) async {
+  Future<MusicDetailC> getMusicDetailsC(int trackId) async {
     var result = await http.Client().get(Uri.parse(
         "https://api.musixmatch.com/ws/1.1/track.lyrics.get?track_id=$trackId&apikey=64c31aa4e064d70b5352bec1a5934a5c"));
     if (result.statusCode != 200) {
       throw Exception();
     }
-    return result.body;
+    final jsonDecode = json.decode(result.body);
+
+    return MusicDetailC.fromJson(jsonDecode);
   }
 }

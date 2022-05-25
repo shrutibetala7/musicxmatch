@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musicxmatch/bloc/music_bloc.dart';
 import 'package:musicxmatch/bloc/music_events.dart';
+import 'package:musicxmatch/musicDetailModelB.dart';
 import 'package:musicxmatch/musicRepo.dart';
 
 import 'bloc/music_state.dart';
+import 'musicDetaillModelC.dart';
 import 'musicModel.dart';
 
 void main() {
@@ -126,23 +128,27 @@ class MusicDetails extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              FutureBuilder<String>(
+              FutureBuilder<MusicDetailB>(
                   future: MusicRepo().getMusicDetailsB(236420300),
-                  builder:
-                      (BuildContext context, AsyncSnapshot<String> snapshot) {
+                  builder: (BuildContext context,
+                      AsyncSnapshot<MusicDetailB> snapshot) {
                     return Text("${snapshot.data}");
                   }),
-              FutureBuilder<String>(
+              FutureBuilder<MusicDetailC>(
                   future: MusicRepo().getMusicDetailsC(236420300),
-                  builder:
-                      (BuildContext context, AsyncSnapshot<String> snapshot) {
-                    return Column(
-                      children: [
-                        Text("Lyrics",
-                            style: TextStyle(fontWeight: FontWeight.bold)),
-                        Text("${snapshot.data}"),
-                      ],
-                    );
+                  builder: (BuildContext context,
+                      AsyncSnapshot<MusicDetailC> snapshot) {
+                    if (snapshot.hasData) {
+                      return Column(
+                        children: [
+                          Text("Lyrics",
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          Text("${snapshot.data!.message.body.lyrics}"),
+                        ],
+                      );
+                    } else {
+                      return Text("Loading");
+                    }
                   }),
             ],
           ),
